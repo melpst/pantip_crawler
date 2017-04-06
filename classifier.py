@@ -1,5 +1,3 @@
-#!/usr/bin/python
-#! - * - coding: utf-8 - * -
 
 import requests
 import os
@@ -19,10 +17,10 @@ def ssense(comment):
 
 if __name__ == '__main__':
 	script, topic = argv
-	txt = open("/home/melpst/Web Crawler/รถไฟฟ้า_(BTS)/CommentLog_"+topic+".txt")
-	
+	#txt = open("/home/melpst/Web Crawler/รถไฟฟ้า_(BTS)/CommentLog_"+topic+".txt")
+	txt = open("/home/melpst/Web Crawler/pantip_crawler/testcase.txt")
 	comments = txt.read()
-	comments = re.sub(r"Comment [0-9]* :", "", comments)
+	comments = re.sub(r"Topic [0-9]* Comment [0-9]* :", "", comments)
 	comments = comments.split("================================")
 	
 	for i in range(0, len(comments)):

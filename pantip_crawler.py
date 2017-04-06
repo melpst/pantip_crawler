@@ -9,7 +9,9 @@ import urllib2
 from bs4 import BeautifulSoup
 from socket import error as SocketError
 import errno
+import json
 from selenium import webdriver
+from sys import argv
 
 class PantipCrawler:
 
@@ -37,7 +39,7 @@ class PantipCrawler:
             soup = self.browser.page_source.encode('utf-8')
             soup = BeautifulSoup(soup)
             productDivs = soup.findAll('div', attrs={'class' : 'post-item-title'})
-            folder = './'+tag
+            folder = '/home/melpst/Web Crawler/'+tag
             if not os.path.exists(folder):
                 os.makedirs(folder)
             for div in productDivs:
@@ -45,10 +47,13 @@ class PantipCrawler:
                 links.append(link)
             i = 1
             for link in links:
-                print "get link from tag >> get comment"                
-                self.get_comments(link, folder)
-                print i
-                i += 1
+                print link
+                is_ads = re.match('//ads.*', link)
+                if not is_ads:
+                    print "get link from tag >> get comment"                
+                    self.get_comments(link, folder)
+                    print i
+                    i += 1
                 
         except requests.exceptions.RequestException as e:
             print e
@@ -65,6 +70,7 @@ class PantipCrawler:
                 message = message.replace("\r","")
                 message = message.replace("\n","")
                 message = message.replace("\t","")
+                message = message.strip();
                 comments.append(message)
             topic = topic.replace("/topic/","")
             print topic
@@ -73,7 +79,7 @@ class PantipCrawler:
 
         except requests.exceptions.RequestException as e:
             print e
-    
+
     def write_file(self, comments, title, folder):
         with open(folder+'/CommentLog_'+title+'.txt', 'w') as f:
             i = 1
@@ -86,6 +92,8 @@ class PantipCrawler:
 
 # print "Crawler Bot initializing...\n===============================\n\n"
 
-bot = PantipCrawler()
+if __name__ == '__main__':
+    script, tag = argv
+    bot = PantipCrawler()
 
-bot.get_link_from_tag("Android")
+    bot.get_link_from_tag(tag)
