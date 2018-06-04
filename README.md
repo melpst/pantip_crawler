@@ -5,7 +5,7 @@
 - Python 2.7
 - GeckoDriver
 - Python libs
-    - Selenium
+    - selenium
     - bs4
     - requests
 ```
